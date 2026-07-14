@@ -28,6 +28,8 @@ directly into the existing `#region Build Fare` flow.
 ## Smoke test
 
 ```bash
+dotnet build NdcSoapModels.sln
 dotnet run --project tests/NdcSoapModels.DeserializeSmokeTest/NdcSoapModels.DeserializeSmokeTest.csproj
 dotnet run --project tests/NdcSoapModels.DeserializeSmokeTest/NdcSoapModels.DeserializeSmokeTest.csproj -- path/to/supplier-response.xml
+dotnet run --project tests/FareResponseXmlLogger/FareResponseXmlLogger.csproj -- path/to/supplier-response.xml logs/fares-response.xml
 ```

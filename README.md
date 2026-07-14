@@ -22,6 +22,9 @@ var journeyFareSets = AirShoppingFareBuilder.BuildJourneyPassengerFareSets(airSh
 ADT are emitted as one passenger-type fare with per-passenger amounts and a
 passenger-type total.
 
+`integration/AirShop.cs` is the uploaded `AirShop.cs` with this logic integrated
+directly into the existing `#region Build Fare` flow.
+
 ## Smoke test
 
 ```bash

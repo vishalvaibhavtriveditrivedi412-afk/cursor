@@ -4,19 +4,20 @@ using OfferPriceSoapModels;
 var envelope = CreateSampleRequest();
 var xml = OfferPriceSoapSerializer.Serialize(envelope);
 var document = XDocument.Parse(xml);
+var root = document.Root ?? throw new InvalidOperationException("Serialized XML did not include a root element.");
 
 XNamespace soap = SoapNamespaces.SoapEnvelope;
 XNamespace xxs = SoapNamespaces.Xxs;
 
-Assert(document.Root?.Name == soap + "Envelope", "SOAP envelope root was not serialized.");
-Assert(document.Root.GetNamespaceOfPrefix("SOAP-ENV") == soap, "SOAP-ENV prefix is missing.");
-Assert(document.Root.GetNamespaceOfPrefix("ns1") == xxs, "ns1 prefix is missing.");
+Assert(root.Name == soap + "Envelope", "SOAP envelope root was not serialized.");
+Assert(root.GetNamespaceOfPrefix("SOAP-ENV") == soap, "SOAP-ENV prefix is missing.");
+Assert(root.GetNamespaceOfPrefix("ns1") == xxs, "ns1 prefix is missing.");
 
-var transaction = document.Root.Element(soap + "Body")?.Element(xxs + "XXTransaction");
-Assert(transaction is not null, "XXTransaction wrapper was not serialized.");
+var transaction = root.Element(soap + "Body")?.Element(xxs + "XXTransaction")
+    ?? throw new InvalidOperationException("XXTransaction wrapper was not serialized.");
 
-var request = transaction.Element("REQ")?.Element("OfferPriceRQ");
-Assert(request is not null, "OfferPriceRQ was not serialized.");
+var request = transaction.Element("REQ")?.Element("OfferPriceRQ")
+    ?? throw new InvalidOperationException("OfferPriceRQ was not serialized.");
 Assert((string?)request.Attribute("Version") == "17.2", "Version attribute was not serialized.");
 Assert((string?)request.Attribute("TransactionIdentifier") == "702471085534928", "TransactionIdentifier attribute was not serialized.");
 Assert(request.Element("Query")?.Elements("Offer").Count() == 2, "Expected two offers.");

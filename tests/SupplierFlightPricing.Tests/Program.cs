@@ -3,7 +3,8 @@ using SupplierFlightPricing;
 if (args.Length != 1)
 {
     Console.Error.WriteLine("Usage: SupplierFlightPricing.Tests <path-to-offer-price-response.xml>");
-    return 2;
+    Environment.ExitCode = 2;
+    return;
 }
 
 await using var stream = File.OpenRead(args[0]);
